@@ -1,0 +1,8 @@
+target
+*.iml
+.idea
+README.md
+docker-compose.yml
+pom.xml
+.DS_Store
+volumes/mysql

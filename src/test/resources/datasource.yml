@@ -1,0 +1,20 @@
+tenantSettings:
+  driverClassName: com.mysql.jdbc.Driver
+  dialect: org.hibernate.dialect.MySQLDialect
+  validationQuery: select 1 from dual
+  tenants:
+  - name: Singapore
+    id: SG
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/sg
+    username: singapore
+    password: password1
+  - name: India
+    id: IN
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/in
+    username: india
+    password: password1
+  - name: Hong Kong
+    id: HK
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/hk
+    username: hongkong
+    password: password1
