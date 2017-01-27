@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class DatabaseConfigurations {
 
     protected DataSource getDataSource() throws PropertyVetoException, SQLException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.getConnection().setAutoCommit(false);
+        //dataSource.getConnection().setAutoCommit(false);
         dataSource.setDriverClass(getDriverClassName());
         dataSource.setJdbcUrl(getUrl());
         dataSource.setUser(getUser());
@@ -185,12 +186,11 @@ public class DatabaseConfigurations {
     @Bean
     public Properties databaseProperties() {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/META-INF/spring/database.properties"));
+        propertiesFactoryBean.setLocation(new ClassPathResource("META-INF/spring/defaultdb.properties"));
         Properties properties;
         try {
             propertiesFactoryBean.afterPropertiesSet();
             properties = propertiesFactoryBean.getObject();
-
         } catch (IOException e) {
             throw new RuntimeException("Unable to load database configuration");
         }
@@ -200,11 +200,14 @@ public class DatabaseConfigurations {
     @Bean
     public DataSourcePool dataSourcePool() throws FileNotFoundException, YamlException {
         DataSourcePool pool = new DataSourcePool();
-        TenantDataSourceRepository dataSourceRepository = TenantDataSourceRepository.fromYaml("/META-INF/spring/database.yml");
+
+        InputStream is = DatabaseConfigurations.class.getResourceAsStream("/META-INF/spring/tenants.yml");
+        TenantDataSourceRepository dataSourceRepository = TenantDataSourceRepository.fromInputStream(is);
+
         dataSourceRepository.getTenantDataSources().forEach(ds -> {
             try {
                 ComboPooledDataSource dataSource = new ComboPooledDataSource();
-                dataSource.getConnection().setAutoCommit(false);
+                //dataSource.getConnection().setAutoCommit(false);
                 dataSource.setDriverClass(ds.driverClassName);
                 dataSource.setJdbcUrl(ds.jdbcUrl);
                 dataSource.setUser(ds.username);

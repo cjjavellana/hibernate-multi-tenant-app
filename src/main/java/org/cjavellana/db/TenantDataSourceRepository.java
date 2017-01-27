@@ -8,23 +8,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 public class TenantDataSourceRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantDataSourceRepository.class);
 
-    private String yamlPath;
+
+    private Reader reader;
     private List<TenantDataSource> tenantDataSources = new ArrayList<>();
 
-    private TenantDataSourceRepository(String file) {
-        this.yamlPath = file;
+    private TenantDataSourceRepository(String file) throws FileNotFoundException {
+        this.reader = new FileReader(file);
     }
 
-    private void init() throws FileNotFoundException, YamlException {
-        YamlReader yamlReader = new YamlReader(new FileReader(this.yamlPath));
+    private TenantDataSourceRepository(InputStream is) {
+        this.reader = new InputStreamReader(is);
+    }
+
+    private void init() throws YamlException {
+        YamlReader yamlReader = new YamlReader(reader);
 
         Map<String, Object> yamlMap = (Map<String, Object>) yamlReader.read();
         Map<String, Object> tenantSettingsMap = tenantSettingsMap(yamlMap);
@@ -78,6 +82,12 @@ public class TenantDataSourceRepository {
 
     public static TenantDataSourceRepository fromYaml(String file) throws FileNotFoundException, YamlException {
         TenantDataSourceRepository repo = new TenantDataSourceRepository(file);
+        repo.init();
+        return repo;
+    }
+
+    public static TenantDataSourceRepository fromInputStream(InputStream is) throws YamlException {
+        TenantDataSourceRepository repo = new TenantDataSourceRepository(is);
         repo.init();
         return repo;
     }

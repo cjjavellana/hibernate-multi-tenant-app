@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class TenantDataSourceRepositoryTest {
 
-    private static final String YAML_PATH = "src/test/resources/datasource.yml";
+    private static final String YAML_PATH = "src/test/resources/tenants.yml";
 
     @Test
     public void itIsAbleToCreateDataSourceRepositoryFromYaml() throws YamlException, FileNotFoundException {
