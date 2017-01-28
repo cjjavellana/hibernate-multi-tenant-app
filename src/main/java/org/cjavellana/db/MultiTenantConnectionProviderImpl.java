@@ -21,6 +21,11 @@ public class MultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMu
 
     @Override
     protected DataSource selectDataSource(String tenant) {
-        return dataSourcePool.getDataSourceFor(tenant);
+        DataSource dataSource = dataSourcePool.getDataSourceFor(tenant);
+        if (dataSource != null) {
+            return dataSource;
+        }
+
+        return selectAnyDataSource();
     }
 }

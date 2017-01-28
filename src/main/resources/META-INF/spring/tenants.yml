@@ -7,14 +7,14 @@ tenantSettings:
     id: SG
     jdbcUrl: jdbc:mysql://127.0.0.1:3306/sg
     username: SINGAPORE
-    password: PASSWORD
+    password: password
   - name: India
     id: IN
     jdbcUrl: jdbc:mysql://127.0.0.1:3306/in
     username: INDIA
-    password: PASSWORD
+    password: password
   - name: Hong Kong
     id: HK
     jdbcUrl: jdbc:mysql://127.0.0.1:3306/hk
     username: HONGKONG
-    password: PASSWORD
+    password: password
